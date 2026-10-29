@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "packages": [
+    "python312",
+    "python312Packages.requests",
+    "nodejs_22",
+    "ripgrep",
+    "jq",
+    "hello"
+  ],
+  "env": {
+    "DEMO_GREETING": "tools from .nono/workspace.json"
+  }
+}

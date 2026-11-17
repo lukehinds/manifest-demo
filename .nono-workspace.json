@@ -20,8 +20,5 @@
     "figlet",
     "lolcat",
     "hello"
-  ],
-  "env": {
-    "DEMO_GREETING": "tools from .nono-workspace.json"
-  }
+  ]
 }

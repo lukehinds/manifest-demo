@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(crew inbox *)",
+      "Bash(crew context *)",
+      "Bash(gh pr *)"
+    ]
+  }
+}

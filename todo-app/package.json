@@ -1,0 +1,14 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "A modern, responsive, full-featured Todo application",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "keywords": ["todo", "productivity"],
+  "author": "",
+  "license": "MIT"
+}

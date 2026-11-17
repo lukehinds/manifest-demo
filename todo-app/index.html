@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FocusTask — Modern Todo App</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/></svg>" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 12 2 2 4-4"></path>
+            <circle cx="12" cy="12" r="10"></circle>
+          </svg>
+        </div>
+        <div>
+          <h1>FocusTask</h1>
+          <p class="subtitle" id="currentDateDisplay">Stay organized and productive</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggleBtn" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats Dashboard -->
+    <section class="stats-card">
+      <div class="stats-header">
+        <span class="stats-title">Progress Overview</span>
+        <span class="stats-percent" id="statsPercent">0%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-value" id="statTotal">0</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value text-success" id="statCompleted">0</span>
+          <span class="stat-label">Completed</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value text-primary" id="statActive">0</span>
+          <span class="stat-label">Active</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value text-danger" id="statOverdue">0</span>
+          <span class="stat-label">Overdue</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Add Task Form -->
+    <section class="card input-card">
+      <form id="addTodoForm" autocomplete="off">
+        <div class="input-row-main">
+          <input
+            type="text"
+            id="todoInput"
+            class="todo-input"
+            placeholder="What needs to be done? (Press Enter to add)"
+            required
+            maxlength="200"
+          />
+          <button type="submit" class="btn btn-primary" id="addBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            <span>Add Task</span>
+          </button>
+        </div>
+        <div class="input-row-meta">
+          <div class="meta-field">
+            <label for="prioritySelect">Priority</label>
+            <select id="prioritySelect" class="form-select">
+              <option value="low">🟢 Low</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="high">🔴 High</option>
+            </select>
+          </div>
+          <div class="meta-field">
+            <label for="categorySelect">Category</label>
+            <select id="categorySelect" class="form-select">
+              <option value="Personal" selected>Personal</option>
+              <option value="Work">Work</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Health">Health</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="meta-field">
+            <label for="dueDateInput">Due Date</label>
+            <input type="date" id="dueDateInput" class="form-select" />
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Filter & Search Controls -->
+    <section class="controls-section">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search tasks or categories... (Ctrl+/)"
+        />
+        <button id="clearSearchBtn" class="clear-search-btn" style="display: none;" title="Clear search">×</button>
+      </div>
+
+      <div class="filters-row">
+        <!-- Status Tabs -->
+        <div class="filter-tabs" role="tablist">
+          <button class="tab-btn active" data-status="all" role="tab" aria-selected="true">
+            All <span class="badge" id="countAll">0</span>
+          </button>
+          <button class="tab-btn" data-status="active" role="tab" aria-selected="false">
+            Active <span class="badge" id="countActive">0</span>
+          </button>
+          <button class="tab-btn" data-status="completed" role="tab" aria-selected="false">
+            Completed <span class="badge" id="countCompleted">0</span>
+          </button>
+        </div>
+
+        <div class="filter-dropdowns">
+          <select id="filterCategory" class="filter-select" aria-label="Filter by category">
+            <option value="all">All Categories</option>
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Health">Health</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <select id="filterPriority" class="filter-select" aria-label="Filter by priority">
+            <option value="all">All Priorities</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+
+          <select id="sortBy" class="filter-select" aria-label="Sort by">
+            <option value="createdAt_desc">Newest First</option>
+            <option value="createdAt_asc">Oldest First</option>
+            <option value="dueDate_asc">Due Date (Soonest)</option>
+            <option value="priority_desc">Priority (High to Low)</option>
+            <option value="text_asc">Alphabetical (A-Z)</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bulk Actions Bar -->
+    <div class="bulk-bar" id="bulkBar">
+      <span id="bulkSummaryText" class="bulk-text">0 items selected</span>
+      <div class="bulk-buttons">
+        <button id="toggleAllBtn" class="btn btn-sm btn-outline">Complete All</button>
+        <button id="clearCompletedBtn" class="btn btn-sm btn-outline btn-danger-outline">Clear Completed</button>
+      </div>
+    </div>
+
+    <!-- Todo List -->
+    <main class="todos-container">
+      <ul id="todoList" class="todo-list" aria-label="Task list"></ul>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <div class="empty-state-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect>
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <path d="m9 14 2 2 4-4"></path>
+          </svg>
+        </div>
+        <h3 id="emptyStateTitle">No tasks found</h3>
+        <p id="emptyStateDesc">You're all caught up! Add a new task above to get started.</p>
+        <button id="resetFiltersBtn" class="btn btn-secondary btn-sm" style="display: none;">Reset Filters</button>
+      </div>
+    </main>
+
+    <!-- Edit Task Modal -->
+    <div id="editModal" class="modal-overlay" aria-hidden="true" style="display: none;">
+      <div class="modal-content" role="dialog" aria-labelledby="editModalTitle">
+        <div class="modal-header">
+          <h2 id="editModalTitle">Edit Task</h2>
+          <button id="closeModalBtn" class="icon-btn close-modal-btn" aria-label="Close dialog">×</button>
+        </div>
+        <form id="editTodoForm">
+          <input type="hidden" id="editTodoId" />
+          <div class="form-group">
+            <label for="editTodoText">Task Description</label>
+            <input type="text" id="editTodoText" class="form-input" required maxlength="200" />
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="editPriority">Priority</label>
+              <select id="editPriority" class="form-select">
+                <option value="low">🟢 Low</option>
+                <option value="medium">🟡 Medium</option>
+                <option value="high">🔴 High</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="editCategory">Category</label>
+              <select id="editCategory" class="form-select">
+                <option value="Personal">Personal</option>
+                <option value="Work">Work</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Health">Health</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="editDueDate">Due Date</label>
+            <input type="date" id="editDueDate" class="form-input" />
+          </div>
+          <div class="modal-actions">
+            <button type="button" id="cancelEditBtn" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
